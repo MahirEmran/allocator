@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['hybridstl_0',['hybridstl',['../structhybrid_1_1HybridSTL.html#a618da5ca2576bca051143244d81c947d',1,'hybrid::HybridSTL::HybridSTL()=default'],['../structhybrid_1_1HybridSTL.html#a8c4451436df06521030140e8bdd6c019',1,'hybrid::HybridSTL::HybridSTL(const HybridSTL&lt; U &gt; &amp;)']]]
+  ['in_5fslab_0',['in_slab',['../namespacehybrid.html#a08f7d8da90ea3c517a06dfc9f88abafb',1,'hybrid']]],
+  ['init_1',['init',['../namespaceslab.html#a8b2945246a031700c8da645bb2cefb1e',1,'slab']]]
 ];

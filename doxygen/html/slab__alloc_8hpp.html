@@ -102,7 +102,6 @@ $(document).ready(function(){initNavTree('slab__alloc_8hpp.html',''); initResiza
 <p>Pool-based slab allocator with static storage.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cstddef&gt;</code><br />
-<code>#include &lt;new&gt;</code><br />
 </div>
 <p><a href="slab__alloc_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -110,9 +109,6 @@ $(document).ready(function(){initNavTree('slab__alloc_8hpp.html',''); initResiza
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structslab_1_1FreeBlock.html">slab::FreeBlock</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">free-list node — stored inside each free block.  <a href="structslab_1_1FreeBlock.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structslab_1_1SlabSTL.html">slab::SlabSTL&lt; T &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">STL-compatible allocator wrapper for the slab.  <a href="structslab_1_1SlabSTL.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -140,12 +136,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a602cee8143feaf45df6d4d984052115f" id="r_a602cee8143feaf45df6d4d984052115f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceslab.html#a602cee8143feaf45df6d4d984052115f">slab::deallocate</a> (void *ptr, std::size_t)</td></tr>
 <tr class="memdesc:a602cee8143feaf45df6d4d984052115f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a block to the pool it actually came from.  <br /></td></tr>
 <tr class="separator:a602cee8143feaf45df6d4d984052115f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaed9b67482669f9a28a448560e7ea8a" id="r_abaed9b67482669f9a28a448560e7ea8a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename U &gt; </td></tr>
-<tr class="memitem:abaed9b67482669f9a28a448560e7ea8a"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceslab.html#abaed9b67482669f9a28a448560e7ea8a">slab::operator==</a> (const <a class="el" href="structslab_1_1SlabSTL.html">SlabSTL</a>&lt; T &gt; &amp;, const <a class="el" href="structslab_1_1SlabSTL.html">SlabSTL</a>&lt; U &gt; &amp;)</td></tr>
-<tr class="separator:abaed9b67482669f9a28a448560e7ea8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f7c98deb263b69100b338c80763a724" id="r_a5f7c98deb263b69100b338c80763a724"><td class="memTemplParams" colspan="2">template&lt;typename T , typename U &gt; </td></tr>
-<tr class="memitem:a5f7c98deb263b69100b338c80763a724"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceslab.html#a5f7c98deb263b69100b338c80763a724">slab::operator!=</a> (const <a class="el" href="structslab_1_1SlabSTL.html">SlabSTL</a>&lt; T &gt; &amp;, const <a class="el" href="structslab_1_1SlabSTL.html">SlabSTL</a>&lt; U &gt; &amp;)</td></tr>
-<tr class="separator:a5f7c98deb263b69100b338c80763a724"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
