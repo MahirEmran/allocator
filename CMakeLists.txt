@@ -160,6 +160,8 @@ if(DOXYGEN_FOUND)
     add_custom_target(
         documentation
         COMMAND doxygen ${PROJECT_SOURCE_DIR}/Doxyfile
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${PROJECT_SOURCE_DIR}/docs/index.html ${DOC_DIR}/index.html
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         VERBATIM
         DEPENDS ${SRC_H}
