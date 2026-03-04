@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install tools
+        run: pip3 install gcovr cpplint
+
       - name: Build all
         uses: nick-fields/retry@v3.0.2
         with:
@@ -29,6 +32,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: pip3 install gcovr cpplint
 
       - name: Test
         uses: nick-fields/retry@v3.0.2
@@ -58,8 +64,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install gcovr
-        run: pip3 install gcovr
+      - name: Install tools
+        run: pip3 install gcovr cpplint
 
       - name: Coverage
         uses: nick-fields/retry@v3.0.2
@@ -85,6 +91,8 @@ jobs:
 
   documentation:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -124,6 +132,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install tools
+        run: pip3 install gcovr cpplint
+
       - name: Build all
         uses: nick-fields/retry@v3.0.2
         with:
@@ -136,6 +147,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: pip3 install gcovr cpplint
 
       - name: Test
         uses: nick-fields/retry@v3.0.2
