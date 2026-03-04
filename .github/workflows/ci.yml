@@ -77,7 +77,7 @@ jobs:
       - name: Verify 100% Coverage
         run: |
           cd build
-          gcovr -r .. --filter ../src/ --exclude-throw-branches \
+          gcovr -r .. --config ../gcovr.cfg \
             --fail-under-line 100 \
             --fail-under-function 100 \
             --fail-under-branch 100

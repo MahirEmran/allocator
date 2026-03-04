@@ -86,6 +86,16 @@ static void test_stl_alloc_bad_alloc() {
     std::puts("  PASS test_stl_alloc_bad_alloc");
 }
 
+static void test_capacity_and_contains() {
+    a.reset();
+    assert(arena::Arena::capacity() == ARENA_CAPACITY);
+    void* p = a.allocate(16);
+    assert(a.contains(p));
+    int stack_var = 0;
+    assert(!a.contains(&stack_var));
+    std::puts("  PASS test_capacity_and_contains");
+}
+
 int main() {
     std::puts("=== Arena Allocator Tests ===");
     test_basic_alloc();
@@ -95,5 +105,6 @@ int main() {
     test_exhaustion();
     test_stl_vector();
     test_stl_alloc_bad_alloc();
+    test_capacity_and_contains();
     std::puts("=== All arena tests passed ===");
 }

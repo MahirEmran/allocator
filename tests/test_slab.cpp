@@ -120,6 +120,10 @@ static void test_stl_alloc_bad_alloc() {
 
 int main() {
     std::puts("=== Slab Allocator Tests ===");
+
+    // Exercise total_storage_bytes() and TOTAL_BYTES at runtime.
+    assert(slab::total_storage_bytes() == slab::TOTAL_BYTES);
+
     test_basic_alloc_dealloc();
     test_all_size_classes();
     test_oversized_returns_null();
