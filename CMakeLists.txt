@@ -152,20 +152,24 @@ add_custom_target(
 
 ##### documentation #####
 
-find_package(Doxygen 1.9 REQUIRED)
-if(NOT DOXYGEN_FOUND)
-    message(FATAL_ERROR "Doxygen is required but was not found.")
+find_package(Doxygen 1.9 QUIET)
+
+if(DOXYGEN_FOUND)
+    file(MAKE_DIRECTORY ${DOC_DOXYGEN_DIR})
+
+    add_custom_target(
+        documentation
+        COMMAND doxygen ${PROJECT_SOURCE_DIR}/Doxyfile
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        VERBATIM
+        DEPENDS ${SRC_H}
+        COMMENT "Generates Doxygen documentation")
+else()
+    message(STATUS "Doxygen not found — documentation target disabled")
+    add_custom_target(documentation
+                      COMMAND ${CMAKE_COMMAND} -E echo "Doxygen not found, skipping docs"
+                      COMMENT "Doxygen not available")
 endif()
-
-file(MAKE_DIRECTORY ${DOC_DOXYGEN_DIR})
-
-add_custom_target(
-    documentation
-    COMMAND doxygen ${PROJECT_SOURCE_DIR}/Doxyfile
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    VERBATIM
-    DEPENDS ${SRC_H}
-    COMMENT "Generates Doxygen documentation")
 
 ##### default workflow target #####
 
