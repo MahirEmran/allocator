@@ -1,0 +1,145 @@
+name: Build, Test, Lint, Coverage, and Documentation
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build all
+        uses: nick-fields/retry@v3.0.2
+        with:
+          max_attempts: 3
+          timeout_minutes: 3
+          command: ./build.sh clean && ./build.sh compile
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test
+        uses: nick-fields/retry@v3.0.2
+        with:
+          max_attempts: 3
+          timeout_minutes: 3
+          command: ./build.sh clean && ./build.sh test
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install cpplint
+        run: pip3 install cpplint
+
+      - name: Stylecheck
+        run: cpplint --recursive src/ tests/
+
+      - name: Line Ending Check (Ensure LF)
+        uses: erclu/check-crlf@master
+
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gcovr
+        run: pip3 install gcovr
+
+      - name: Coverage
+        uses: nick-fields/retry@v3.0.2
+        with:
+          max_attempts: 3
+          timeout_minutes: 3
+          command: ./build.sh clean && ./build.sh coverage
+
+      - name: Verify 100% Coverage
+        run: |
+          cd build
+          gcovr -r .. --filter ../src/ --exclude-throw-branches \
+            --fail-under-line 100 \
+            --fail-under-function 100 \
+            --fail-under-branch 100
+
+      - name: Upload Coverage Report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Coverage Report
+          path: build/documentation/coverage
+
+  documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen
+          pip3 install gcovr cpplint
+
+      - name: Generate Documentation
+        run: |
+          ./build.sh clean
+          ./build.sh coverage || true
+          ./build.sh docs
+
+      - name: Set Target Folder
+        id: set-folder
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "TARGET_FOLDER=." >> $GITHUB_ENV
+          else
+            echo "TARGET_FOLDER=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Upload Pages Artifact
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: documentation
+          folder: build/documentation/
+          target-folder: ${{ env.TARGET_FOLDER }}
+
+  cmake-build-all:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build all
+        uses: nick-fields/retry@v3.0.2
+        with:
+          max_attempts: 3
+          timeout_minutes: 3
+          command: ./build.sh clean && ./build.sh compile
+
+  cmake-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test
+        uses: nick-fields/retry@v3.0.2
+        with:
+          max_attempts: 3
+          timeout_minutes: 3
+          command: ./build.sh clean && ./build.sh test
