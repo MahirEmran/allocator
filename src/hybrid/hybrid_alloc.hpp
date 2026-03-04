@@ -74,30 +74,6 @@ static void reset_arenas() {
     for (std::size_t i = 0; i < NUM_ARENAS; ++i) arenas[i].reset();
 }
 
-/// @brief STL-compatible allocator wrapper for the hybrid allocator.
-/// Routes through arena 0 by default.
-template <typename T>
-struct HybridSTL {
-    typedef T value_type;
-    HybridSTL() = default;
-    template <typename U> HybridSTL(const HybridSTL<U>&) {}
-
-    T* allocate(std::size_t n) {
-        /// TODO: would have to check how to do with arena id as well..
-        void* p = hybrid::allocate(n * sizeof(T));
-        if (!p) throw std::bad_alloc();  // GCOVR_EXCL_BR_LINE
-        return static_cast<T*>(p);
-    }
-    void deallocate(T* p, std::size_t n) {
-        hybrid::deallocate(p, n * sizeof(T));
-    }
-};
-
-template <typename T, typename U>
-bool operator==(const HybridSTL<T>&, const HybridSTL<U>&) { return true; }
-template <typename T, typename U>
-bool operator!=(const HybridSTL<T>&, const HybridSTL<U>&) { return false; }
-
 }  // namespace hybrid
 
 #endif  // SRC_HYBRID_HYBRID_ALLOC_HPP_

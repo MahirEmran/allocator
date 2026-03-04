@@ -6,6 +6,7 @@
 /// Include in exactly ONE translation unit.
 
 #include "slab/slab_alloc.hpp"
+#include <new>
 
 void* operator new(std::size_t size) {
     void* p = slab::allocate(size);

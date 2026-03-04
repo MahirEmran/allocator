@@ -5,6 +5,7 @@
 /// @brief Global operator new/delete overrides using arena alloc.
 
 #include "arena/arena_alloc.hpp"
+#include <new>
 
 /// Module-level arena used by the overridden operators.
 static arena::Arena overrides_arena;

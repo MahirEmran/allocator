@@ -15,13 +15,13 @@ int main() {
     auto* b = new Bar{1, 2, 3};
     assert(b->a == 1 && b->b == 2 && b->c == 3);
     assert(overrides_arena.used() > 0);
-    delete b;
+    ::operator delete(static_cast<void*>(b));
 
     // operator new[] + unsized delete[]
     auto* arr = new int[16];
     for (int i = 0; i < 16; ++i) arr[i] = i * 10;
     assert(arr[15] == 150);
-    delete[] arr;
+    ::operator delete[](static_cast<void*>(arr));
 
     // Explicitly call sized delete variants for coverage
     auto* b2 = new Bar{4, 5, 6};

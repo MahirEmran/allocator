@@ -7,7 +7,6 @@
 /// Override the buffer size with \#define ARENA_CAPACITY before including.
 
 #include <cstddef>
-#include <new>
 
 #ifndef ARENA_CAPACITY
 #define ARENA_CAPACITY (64 * 1024)
@@ -48,33 +47,6 @@ struct Arena {
         return p >= buf && p < buf + ARENA_CAPACITY;  // GCOVR_EXCL_BR_LINE
     }
 };
-
-/// @brief STL allocator wrapper that routes to a caller-supplied Arena.
-/// TODO: I'm unsure of the implementation of this, I don't really like it much
-/// I don't think it'd really work if we solely rely on arena
-template <typename T>
-struct ArenaSTL {
-    typedef T value_type;
-    Arena* arena_;  /// Pointer to the arena being used.
-
-    /// @brief Construct with a reference to an Arena.
-    explicit ArenaSTL(Arena& a) : arena_(&a) {}
-    /// @brief Converting copy constructor for rebind.
-    template <typename U> ArenaSTL(const ArenaSTL<U>& o)  // NOLINT(runtime/explicit)
-        : arena_(o.arena_) {}
-
-    T* allocate(std::size_t n) {
-        void* p = arena_->allocate(n * sizeof(T));
-        if (!p) throw std::bad_alloc();
-        return static_cast<T*>(p);
-    }
-    void deallocate(T*, std::size_t) {}
-};
-
-template <typename T, typename U>
-bool operator==(const ArenaSTL<T>&, const ArenaSTL<U>&) { return true; }
-template <typename T, typename U>
-bool operator!=(const ArenaSTL<T>&, const ArenaSTL<U>&) { return false; }
 
 }  // namespace arena
 

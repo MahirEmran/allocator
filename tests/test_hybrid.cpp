@@ -93,39 +93,6 @@ static void test_dealloc_nullptr() {
     std::puts("  PASS test_dealloc_nullptr");
 }
 
-static void test_stl_vector() {
-    hybrid::reset_arenas();
-    std::vector<int, hybrid::HybridSTL<int>> vec;
-    for (int i = 0; i < 100; ++i) vec.push_back(i);
-    assert(vec.size() == 100);
-    assert(vec[99] == 99);
-    std::puts("  PASS test_stl_vector");
-}
-
-static void test_stl_list_uses_slab() {
-    hybrid::reset_arenas();
-    std::list<int, hybrid::HybridSTL<int>> lst;
-    for (int i = 0; i < 10; ++i) lst.push_back(i);
-    assert(lst.size() == 10);
-    assert(hybrid::get_arena(0).used() == 0);
-    std::puts("  PASS test_stl_list_uses_slab");
-}
-
-static void test_stl_alloc_bad_alloc() {
-    hybrid::reset_arenas();
-    hybrid::get_arena(0).allocate(ARENA_CAPACITY);
-    bool caught = false;
-    try {
-        hybrid::HybridSTL<char> a;
-        a.allocate(4097);
-    } catch (const std::bad_alloc&) {
-        caught = true;
-    }
-    assert(caught);
-    hybrid::reset_arenas();
-    std::puts("  PASS test_stl_alloc_bad_alloc");
-}
-
 static void test_slab_full_falls_back_to_arena() {
     hybrid::reset_arenas();
     // Dimension uses pool-0 count (all pools currently equal).
@@ -157,8 +124,5 @@ int main() {
     test_zero_size_alloc();
     test_dealloc_nullptr();
     test_slab_full_falls_back_to_arena();
-    test_stl_vector();
-    test_stl_list_uses_slab();
-    test_stl_alloc_bad_alloc();
     std::puts("=== All hybrid tests passed ===");
 }

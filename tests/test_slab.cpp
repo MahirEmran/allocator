@@ -1,8 +1,6 @@
 #include <cassert>
 #include <cstdio>
 #include <cstring>
-#include <list>
-#include <vector>
 
 #include "slab/slab_alloc.hpp"
 
@@ -77,47 +75,6 @@ static void test_dealloc_outside_storage() {
     std::puts("  PASS test_dealloc_outside_storage");
 }
 
-static void test_stl_vector() {
-    std::vector<int, slab::SlabSTL<int>> vec;
-    for (int i = 0; i < 20; ++i) vec.push_back(i);
-    assert(vec.size() == 20);
-    assert(vec[0] == 0);
-    assert(vec[19] == 19);
-    std::puts("  PASS test_stl_vector");
-}
-
-static void test_stl_list() {
-    std::list<int, slab::SlabSTL<int>> lst;
-    for (int i = 0; i < 10; ++i) lst.push_back(i * 10);
-    assert(lst.size() == 10);
-    assert(lst.front() == 0);
-    assert(lst.back() == 90);
-    std::puts("  PASS test_stl_list");
-}
-
-static void test_stl_alloc_bad_alloc() {
-    // Exhaust the largest pool (no next-pool fallback)
-    static constexpr std::size_t N = slab::BLOCKS_PER_POOL[slab::NUM_CLASSES - 1];
-    void* ptrs[N];
-    for (std::size_t i = 0; i < N; ++i) {
-        ptrs[i] = slab::allocate(slab::MAX_SIZE);
-    }
-
-    bool caught = false;
-    try {
-        slab::SlabSTL<char> a;
-        a.allocate(slab::MAX_SIZE);
-    } catch (const std::bad_alloc&) {
-        caught = true;
-    }
-    assert(caught);
-
-    for (std::size_t i = 0; i < N; ++i)
-        slab::deallocate(ptrs[i], slab::MAX_SIZE);
-
-    std::puts("  PASS test_stl_alloc_bad_alloc");
-}
-
 int main() {
     std::puts("=== Slab Allocator Tests ===");
 
@@ -131,8 +88,5 @@ int main() {
     test_zero_size_alloc();
     test_dealloc_nullptr();
     test_dealloc_outside_storage();
-    test_stl_vector();
-    test_stl_list();
-    test_stl_alloc_bad_alloc();
     std::puts("=== All slab tests passed ===");
 }

@@ -20,18 +20,18 @@ int main() {
     // Small allocation (goes to slab)
     auto* s = new Small{};
     assert(hybrid::get_arena(0).used() == 0);
-    delete s;
+    ::operator delete(static_cast<void*>(s));
 
     // Large allocation (goes to arena 0 by default)
     auto* l = new Large{};
     assert(hybrid::get_arena(0).used() >= sizeof(Large));
-    delete l;
+    ::operator delete(static_cast<void*>(l));
 
     // Array allocation
     auto* arr = new int[4];
     arr[0] = 42;
     assert(arr[0] == 42);
-    delete[] arr;
+    ::operator delete[](static_cast<void*>(arr));
 
     // Explicitly call sized delete variants for coverage
     auto* s2 = new Small{};

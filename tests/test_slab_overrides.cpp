@@ -11,16 +11,16 @@ struct Foo {
 int main() {
     std::puts("=== Slab new/delete Override Tests ===");
 
-    // operator new + normal delete
+    // operator new + unsized delete
     auto* f = new Foo{10, 20};
     assert(f->x == 10 && f->y == 20);
-    delete f;
+    ::operator delete(static_cast<void*>(f));
 
-    // operator new[] + normal delete[]
+    // operator new[] + unsized delete[]
     auto* arr = new int[8];
     for (int i = 0; i < 8; ++i) arr[i] = i;
     assert(arr[7] == 7);
-    delete[] arr;
+    ::operator delete[](static_cast<void*>(arr));
 
     // Explicitly call sized delete variants for coverage
     auto* f2 = new Foo{30, 40};

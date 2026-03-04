@@ -5,6 +5,7 @@
 /// @brief Global operator new/delete overrides through hybrid.
 
 #include "hybrid/hybrid_alloc.hpp"
+#include <new>
 
 void* operator new(std::size_t size) {
     /// TODO: figure out how to do arena ids here

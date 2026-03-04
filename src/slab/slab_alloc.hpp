@@ -7,7 +7,6 @@
 /// All memory lives in a static char array.
 
 #include <cstddef>
-#include <new>
 
 namespace slab {
 
@@ -121,28 +120,6 @@ static void deallocate(void* ptr, std::size_t) {
     blk->next = pools[idx];
     pools[idx] = blk;
 }
-
-/// @brief STL-compatible allocator wrapper for the slab.
-template <typename T>
-struct SlabSTL {
-    typedef T value_type;
-    SlabSTL() = default;
-    template <typename U> SlabSTL(const SlabSTL<U>&) {}
-
-    T* allocate(std::size_t n) {
-        void* p = slab::allocate(n * sizeof(T));
-        if (!p) throw std::bad_alloc();  // GCOVR_EXCL_BR_LINE
-        return static_cast<T*>(p);
-    }
-    void deallocate(T* p, std::size_t n) {
-        slab::deallocate(p, n * sizeof(T));
-    }
-};
-
-template <typename T, typename U>
-bool operator==(const SlabSTL<T>&, const SlabSTL<U>&) { return true; }
-template <typename T, typename U>
-bool operator!=(const SlabSTL<T>&, const SlabSTL<U>&) { return false; }
 
 }  // namespace slab
 

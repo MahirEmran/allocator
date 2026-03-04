@@ -1,7 +1,6 @@
 #include <cassert>
 #include <cstdio>
 #include <cstring>
-#include <vector>
 
 #define ARENA_CAPACITY (8 * 1024)
 #include "arena/arena_alloc.hpp"
@@ -60,32 +59,6 @@ static void test_exhaustion() {
     std::puts("  PASS test_exhaustion");
 }
 
-static void test_stl_vector() {
-    a.reset();
-    arena::ArenaSTL<int> alloc(a);
-    std::vector<int, arena::ArenaSTL<int>> vec(alloc);
-    for (int i = 0; i < 50; ++i) vec.push_back(i * i);
-    assert(vec.size() == 50);
-    assert(vec[0] == 0);
-    assert(vec[49] == 2401);
-    std::puts("  PASS test_stl_vector");
-}
-
-static void test_stl_alloc_bad_alloc() {
-    a.reset();
-    a.allocate(ARENA_CAPACITY);
-    bool caught = false;
-    try {
-        arena::ArenaSTL<int> alloc(a);
-        alloc.allocate(1);
-    } catch (const std::bad_alloc&) {
-        caught = true;
-    }
-    assert(caught);
-    a.reset();
-    std::puts("  PASS test_stl_alloc_bad_alloc");
-}
-
 static void test_capacity_and_contains() {
     a.reset();
     assert(arena::Arena::capacity() == ARENA_CAPACITY);
@@ -103,8 +76,6 @@ int main() {
     test_deallocate_is_noop();
     test_reset_wipes();
     test_exhaustion();
-    test_stl_vector();
-    test_stl_alloc_bad_alloc();
     test_capacity_and_contains();
     std::puts("=== All arena tests passed ===");
 }

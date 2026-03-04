@@ -24,4 +24,4 @@ I have implemented 3 options here:
 * Full arena allocator
 * Hybrid slab/arena (slab used for items <= 4096 bytes, arena used for everything else)
 
-Each of these contain code overriding the C++ new/delete/new[]/delete[] and STL container template classes, as appropriate.
+Each of these contain code overriding the C++ new/delete/new[]/delete[]. STL container classes use std::allocate, which then just uses new. So we just override the global operator new/delete/new[]/delete[], as appropriate.
